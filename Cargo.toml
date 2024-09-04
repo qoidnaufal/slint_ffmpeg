@@ -1,0 +1,17 @@
+[package]
+name = "slint_ffmpeg"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+anyhow = "1.0.86"
+derive_more = "0.99.18"
+ffmpeg-the-third = "2.0.1"
+futures = "0.3.30"
+rfd = "0.14.1"
+slint = "1.7.1"
+smol = "2.0.0"
+
+[build-dependencies]
+slint-build = "1.7.1"
