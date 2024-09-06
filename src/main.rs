@@ -7,7 +7,7 @@ mod player;
 use std::{cell::RefCell, rc::Rc};
 
 use player::Player;
-use vp::{rgba_rescaler_for_frame, video_frame_to_pixel_buffer, Rescaler};
+use slint_ffmpeg::{rgba_rescaler_for_frame, video_frame_to_pixel_buffer, Rescaler};
 
 fn main() -> Result<(), slint::PlatformError> {
     let app = App::new()?;
@@ -16,15 +16,14 @@ fn main() -> Result<(), slint::PlatformError> {
     let player = Rc::new(RefCell::new(Player::new()));
 
     app_strong.on_open_file({
-        let player = player.clone();
+        let player_clone = Rc::clone(&player);
 
         move || {
             let pick_file = rfd::FileDialog::new().pick_file();
-            let player = player.clone();
             let mut to_rgba_rescaler: Option<Rescaler> = None;
 
             if let Some(path) = pick_file {
-                player
+                player_clone
                     .borrow_mut()
                     .start(
                         path,
@@ -71,9 +70,9 @@ fn main() -> Result<(), slint::PlatformError> {
     });
 
     app_strong.on_toggle_pause_play({
-        let player = player.clone();
+        let player_clone = Rc::clone(&player);
         move || {
-            player.borrow_mut().toggle_pause_playing();
+            player_clone.borrow_mut().toggle_pause_playing();
         }
     });
 

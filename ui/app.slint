@@ -1,4 +1,4 @@
-import { VerticalBox, Button, Palette } from "std-widgets.slint";
+import { VerticalBox, Button, Palette, Slider } from "std-widgets.slint";
 
 export component App inherits Window {
     in property <image> video-frame <=> image.source;
@@ -7,8 +7,8 @@ export component App inherits Window {
     pure callback toggle-pause-play();
     callback open-file;
 
-    preferred-width: 500px;
-    preferred-height: 500px;
+    preferred-width: image.width;
+    preferred-height: image.height;
     min-width: 500px;
     min-height: 300px;
     title: "Slint FFMPEG Example";
@@ -36,34 +36,46 @@ export component App inherits Window {
 
     VerticalBox {
         Button {
-            height: 50px;
+            height: 30px;
             text: "Open";
             clicked => {
                 root.open-file();
             }
         }
         image := Image {
-            min-height: 300px;
+            min-height: 200px;
         }
+        
     }
 
     area := TouchArea {
-        width: 100%;
+        width: root.width - 20px;
         height: self.preferred-height;
-        y: root.height - self.height - 40px;
-        controls := Rectangle {
-            border-radius: 4px;
-            background: Palette.color-scheme == ColorScheme.dark ? #3737378c : #ffffff82;
+        y: root.height - self.height - 20px;
 
-            Image {
-                width: 64px;
-                height: 64px;
-                source: root.playing ? @image-url("../icons/pause.svg") : @image-url("../icons/play.svg");
+        VerticalLayout {
+            spacing: 5px;
+
+            Slider {
+                width: image.width;
+                height: 13px;
             }
 
-            TouchArea {
-                clicked => {
-                    root.toggle-pause-play();
+            controls := Rectangle {
+                border-radius: 4px;
+                background: Palette.color-scheme == ColorScheme.dark ? #d3d3d375 : #ffffff82;
+                padding: 5px;
+
+                Image {
+                    width: 35px;
+                    height: 35px;
+                    source: root.playing ? @image-url("../icons/pause.svg") : @image-url("../icons/play.svg");
+                }
+
+                TouchArea {
+                    clicked => {
+                        root.toggle-pause-play();
+                    }
                 }
             }
         }
